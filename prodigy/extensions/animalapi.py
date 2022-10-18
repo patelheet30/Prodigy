@@ -13,8 +13,8 @@ animals = [
         "Koala",
         "Birb",
         "Raccoon",
-        "Kangaroo"
-        "Whale"
+        "Kangaroo",
+        "Whale",
     ]
 
 
@@ -70,9 +70,42 @@ async def on_animal_fact(ctx: lightbulb.SlashContext) -> None:
             title=f"It's a fact about a {animal}!",
             description=f"{fact}"
         )
+        .set_author(name=f"{ctx.author}", icon=f"{ctx.author.avatar_url}")
     )
     # Sends the embed
     await ctx.respond(fact_embed)
+
+@animal.child
+@lightbulb.option("animal", "Choose the animal you want an image and fact about", choices=animals)
+@lightbulb.command("imagefact", "Contains a fact and an image of an animal", auto_defer=True)
+@lightbulb.implements(lightbulb.SlashSubCommand)
+async def on_animal_image_and_fact(ctx: lightbulb.SlashContext) -> None:
+    # Changes the choice over to a compatible URL string
+    animal = ctx.options.animal
+    if animal == "Whale":
+        await ctx.respond("Currently facing issues with the Whale API.")
+    else:
+        animalunderscore = animal.replace(" ", "_")
+        animalneeded = animalunderscore.lower()
+        # Connection to the API and gathering of needed data
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"https://some-random-api.ml/animal/{animalneeded}") as jsondata:
+                data = await jsondata.json(content_type="json")
+                print("Data got")
+                print(data)
+        # Creates the embed
+        fact = data['fact']
+        image = data['image']
+        animal_embed = (
+            hikari.Embed(
+                title=f"Oh look! It's an interesting thing about a {animal}",
+                description=f"{fact}"
+            )
+            .set_image(f"{image}")
+            .set_author(name=f"{ctx.author}", icon=f"{ctx.author.avatar_url}")
+        )
+        # Sends the embed
+        await ctx.respond(animal_embed)
 
 
 def load(bot: lightbulb.BotApp) -> None:
