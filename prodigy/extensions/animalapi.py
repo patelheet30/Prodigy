@@ -11,10 +11,9 @@ animals = [
         "Fox",
         "Red Panda",
         "Koala",
-        "Birb",
+        "Bird",
         "Raccoon",
         "Kangaroo",
-        "Whale",
     ]
 
 
@@ -90,7 +89,7 @@ async def on_animal_image_and_fact(ctx: lightbulb.SlashContext) -> None:
         # Connection to the API and gathering of needed data
         async with aiohttp.ClientSession() as session:
             async with session.get(f"https://some-random-api.ml/animal/{animalneeded}") as jsondata:
-                data = await jsondata.json(content_type="json")
+                data = await jsondata.json()
         # Creates the embed
         fact = data['fact']
         image = data['image']
