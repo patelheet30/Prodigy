@@ -2,7 +2,7 @@ import hikari
 import lightbulb
 import aiohttp
 
-jokes = lightbulb.plugin("Jokes", "A set of commands which send jokes. Customisable to include blacklists")
+jokes = lightbulb.Plugin("Jokes", "A set of commands which send jokes. Customisable to include blacklists")
 
 def load(bot: lightbulb.BotApp) -> None:
     bot.add_plugin(jokes)
