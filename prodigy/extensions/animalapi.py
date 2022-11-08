@@ -36,10 +36,10 @@ async def on_animal_image(ctx: lightbulb.SlashContext) -> None:
     animalneeded = animalunderscore.lower()
     # Connection to the API and gathering of needed data
     async with aiohttp.ClientSession() as session:
-        async with session.get(f"https://some-random-api.ml/img/{animalneeded}") as jsondata:
+        async with session.get(f"https://some-random-api.ml/animal/{animalneeded}") as jsondata:
             data = await jsondata.json()
     # Creates the embed
-    image = data['link']
+    image = data['image']
     image_embed = (
         hikari.Embed(
             title=f"It's an image of a {animal}!",
@@ -61,7 +61,7 @@ async def on_animal_fact(ctx: lightbulb.SlashContext) -> None:
     animalneeded = animalunderscore.lower()
     # Connection to the API and gathering of needed data
     async with aiohttp.ClientSession() as session:
-        async with session.get(f"https://some-random-api.ml/facts/{animalneeded}") as jsondata:
+        async with session.get(f"https://some-random-api.ml/animal/{animalneeded}") as jsondata:
             data = await jsondata.json()
     # Creates the embed
     fact = data['fact']
@@ -91,8 +91,6 @@ async def on_animal_image_and_fact(ctx: lightbulb.SlashContext) -> None:
         async with aiohttp.ClientSession() as session:
             async with session.get(f"https://some-random-api.ml/animal/{animalneeded}") as jsondata:
                 data = await jsondata.json(content_type="json")
-                print("Data got")
-                print(data)
         # Creates the embed
         fact = data['fact']
         image = data['image']
